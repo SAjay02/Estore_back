@@ -41,7 +41,7 @@ public class userService {
 		{
 			apiResponse.setStatus(404);
 			apiResponse.setDescription("User has already found");
-			apiResponse.setSuggestion("Please create with new email");
+			apiResponse.setSuggestion("Please create the user with new email");
 			apiResponse.setError(responseStatus.FAILED);
 		}
 		return apiResponse;
@@ -82,7 +82,7 @@ public class userService {
 		{
 			apiResponse.setData(existUser);
 			apiResponse.setStatus(200);
-			apiResponse.setDescription("User Retrieved Successfully bu Email");
+			apiResponse.setDescription("User Retrieved Successfully by Email");
 		}
 		else
 		{

@@ -1,13 +1,16 @@
 	package com.Student.Estore.models;
 
-import javax.validation.constraints.Min;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -39,6 +42,10 @@ public class User {
 	@NotNull(message = "Pasword is mandatory")
 	@Size(min=6, max=15, message="Password must be between 6 and 15")
 	private String password;
+	
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Products> products;
 	
 	public String getName() {
 		return name;
@@ -75,5 +82,11 @@ public class User {
 	public User() {
 		super();
 	}
+//	public Long getId() {
+//		return id;
+//	}
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 	
 }
