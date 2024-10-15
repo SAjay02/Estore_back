@@ -8,9 +8,13 @@ import com.Student.Estore.models.User;
 
 public interface userRepository extends JpaRepository<User,Long>{
 
-	//get user by name` and update
+	//get user by name and update
 	List<User> findByEmail(String email);
 	
 	//delete items by email
 	void deleteByEmail(String email);
+	
+	//check the user has created already
+	boolean existsByPhonenumberOrEmail(String phonenumber, String email);
+
 }

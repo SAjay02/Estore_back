@@ -1,11 +1,10 @@
 package com.Student.Estore.services;
 
 import java.util.List;
-
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.Student.Estore.commonresponse.Response;
 import com.Student.Estore.models.User;
 import com.Student.Estore.repositories.userRepository;
@@ -18,10 +17,34 @@ public class userService {
 	private userRepository userRepo;
 	
 	
+	@Autowired
+	private ModelMapper modelmap;
+	
+	
 	//create the user endpoint
-	public User createUser(User user)
+	public Response createUser(User user)
 	{
-		return userRepo.save(user);
+		
+		boolean existUser = userRepo.existsByPhonenumberOrEmail(user.getPhonenumber(), user.getEmail());
+		
+		Response apiResponse = new Response();
+		
+		if(!existUser)
+		{
+			User newUser = modelmap.map(user,User.class);
+			userRepo.save(newUser);
+			apiResponse.setStatus(201);
+			apiResponse.setDescription("User has Created Successfully");
+			apiResponse.setData(newUser);
+		}
+		else
+		{
+			apiResponse.setStatus(404);
+			apiResponse.setDescription("User has already found");
+			apiResponse.setSuggestion("Please create with new email");
+			apiResponse.setError(responseStatus.FAILED);
+		}
+		return apiResponse;
 	}
 	
 	//get all user endpoint

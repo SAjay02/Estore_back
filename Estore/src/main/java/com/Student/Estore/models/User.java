@@ -1,13 +1,16 @@
-package com.Student.Estore.models;
+	package com.Student.Estore.models;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Min;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -17,14 +20,26 @@ public class User {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty(message = "Name is not Valid")
+	@NotNull(message = "Name is mandatory")
 	private String name;
 	
-	@Valid
-	@Email(message = "Email should be valid")
-	@NotBlank(message = "email is mandatory")
+	@NotNull(message = "email is mandatory")
+	@Email(message = "Email Should be Valid")
+	@NotEmpty(message = "Email is not Valid")
 	private String email;
+	
+	@NotEmpty(message = "PhoneNumber is not Valid")
+	@NotNull(message = "PhoneNumber is mandatory")
+//	@Max(10)
+//	@Min(10)
 	private String phonenumber;
+	
+	@NotEmpty(message = "Password is not Valid")
+	@NotNull(message = "Pasword is mandatory")
+	@Size(min=6, max=15, message="Password must be between 6 and 15")
 	private String password;
+	
 	public String getName() {
 		return name;
 	}
