@@ -25,11 +25,12 @@ public class userService {
 	public Response createUser(User user)
 	{
 		
-		boolean existUser = userRepo.existsByPhonenumberOrEmail(user.getPhonenumber(), user.getEmail());
+		boolean existUserByNumber = userRepo.existsByPhonenumber(user.getPhonenumber());
+		boolean existUserByEmail = userRepo.existsByEmail(user.getEmail());
 		
 		Response apiResponse = new Response();
 		
-		if(!existUser)
+		if(!existUserByNumber && !existUserByEmail)
 		{
 			User newUser = modelmap.map(user,User.class);
 			userRepo.save(newUser);
@@ -37,11 +38,18 @@ public class userService {
 			apiResponse.setDescription("User has Created Successfully");
 			apiResponse.setData(newUser);
 		}
-		else
+		else if(existUserByEmail)
 		{
-			apiResponse.setStatus(404);
+			apiResponse.setStatus(403);
 			apiResponse.setDescription("User has already found");
 			apiResponse.setSuggestion("Please create the user with new email");
+			apiResponse.setError(responseStatus.FAILED);
+		}
+		else
+		{
+			apiResponse.setStatus(403);
+			apiResponse.setDescription("User has already found");
+			apiResponse.setSuggestion("Please create the user with new number");
 			apiResponse.setError(responseStatus.FAILED);
 		}
 		return apiResponse;

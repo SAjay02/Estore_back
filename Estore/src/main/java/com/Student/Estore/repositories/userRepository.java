@@ -15,6 +15,7 @@ public interface userRepository extends JpaRepository<User,Long>{
 	void deleteByEmail(String email);
 	
 	//check the user has created already
-	boolean existsByPhonenumberOrEmail(String phonenumber, String email);
+	boolean existsByPhonenumber(String phonenumber);
+	boolean existsByEmail(String email);
 
 }

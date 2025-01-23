@@ -97,4 +97,25 @@ public class productDetailsServices {
 		
 		return apiResponse;
 	}
+	
+	public Response getAllProducts()
+	{
+		Response apiResponse = new Response();
+		List<ProductDetails> product = productdetailsrepo.findAll();
+		
+		if(!product.isEmpty())
+		{
+			apiResponse.setData(product);
+			apiResponse.setDescription("Product Retrieved Successfully");
+			apiResponse.setStatus(200);
+		}
+		else
+		{
+			apiResponse.setDescription("Product not found");
+			apiResponse.setStatus(404);
+			apiResponse.setSuggestion("Please Add a new product");
+			apiResponse.setError(responseStatus.FAILED);	
+		}
+		return apiResponse;
+	}
 }

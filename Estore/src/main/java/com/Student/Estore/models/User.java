@@ -1,4 +1,4 @@
-	package com.Student.Estore.models;
+package com.Student.Estore.models;
 
 import java.util.List;
 
