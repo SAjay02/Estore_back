@@ -1,5 +1,5 @@
 package com.Student.Estore.services;
-
+import java.util.regex.*;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ public class userService {
 		
 		if(!existUserByNumber && !existUserByEmail)
 		{
+
 			User newUser = modelmap.map(user,User.class);
 			userRepo.save(newUser);
 			apiResponse.setStatus(201);

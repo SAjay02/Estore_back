@@ -1,5 +1,6 @@
 package com.Student.Estore.controllers;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ import com.Student.Estore.commonresponse.Response;
 import com.Student.Estore.enumeration.responseStatus;
 import com.Student.Estore.models.User;
 import com.Student.Estore.services.userService;
-
+import io.github.bucket4j.*;
 
 @RestController
 @RequestMapping("/user")
@@ -34,6 +35,18 @@ public class userController {
 	
 	@Autowired
 	private userService userservice;
+	
+	 private final Bucket bucket;
+
+	    public userController() {
+	        Bandwidth limit = Bandwidth.classic(5, Refill.greedy(2, Duration.ofMinutes(1))); 
+	        this.bucket = Bucket.builder().addLimit(limit).build();
+	    }
+
+	    private boolean isRateLimited() {
+	    	System.out.println(bucket.getAvailableTokens());
+	        return !bucket.tryConsume(1); 
+	    }
 	
 	@PostMapping("/createuser")
 	public Response createUser(@Valid @RequestBody User user)
@@ -60,6 +73,9 @@ public class userController {
 	@GetMapping
 	public Response getAllUser()
 	{
+		if (isRateLimited()) {
+            return buildRateLimitResponse();
+        }
 		
 		Response apiResponse = new Response();
 		
@@ -144,4 +160,12 @@ public class userController {
 	    return errors;
 	}
 	
+	private Response buildRateLimitResponse() {
+        Response apiResponse = new Response();
+        apiResponse.setStatus(429); 
+        apiResponse.setError(responseStatus.FAILED);
+        apiResponse.setDescription("Rate limit exceeded");
+        apiResponse.setSuggestion("Please wait before making more requests");
+        return apiResponse;
+    }
 }

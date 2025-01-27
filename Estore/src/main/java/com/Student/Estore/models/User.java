@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -34,13 +35,14 @@ public class User {
 	
 	@NotEmpty(message = "PhoneNumber is not Valid")
 	@NotNull(message = "PhoneNumber is mandatory")
-//	@Max(10)
-//	@Min(10)
+	@Pattern(regexp = "^\\d{10}$", message = "Phone number must be exactly 10 digits")
 	private String phonenumber;
 	
 	@NotEmpty(message = "Password is not Valid")
 	@NotNull(message = "Pasword is mandatory")
 	@Size(min=6, max=15, message="Password must be between 6 and 15")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{7,}$", 
+    message = "Password must contain uppercase, lowercase, number, special character, and be at least 7 characters long")
 	private String password;
 	
 	
